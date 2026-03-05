@@ -1,6 +1,4 @@
 # Author: Ronald Wen
-version: '3.9'
-
 services:
   postgres:
     image: postgres:15

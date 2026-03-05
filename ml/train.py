@@ -33,20 +33,21 @@ def train():
             use_label_encoder=False,
             eval_metric='logloss',
             random_state=42,
-            n_jobs=-1,
+            n_jobs=2,          # limit to 2 cores to avoid memory/CPU spike
+            tree_method='hist', # faster, lower memory than exact
         )
 
-        cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
+        cv = StratifiedKFold(n_splits=3, shuffle=True, random_state=42)  # 3-fold instead of 5
 
         search = RandomizedSearchCV(
             estimator=base_model,
             param_distributions=PARAM_DIST,
-            n_iter=20,
+            n_iter=5,          # 5 iterations instead of 20
             scoring='roc_auc',
             cv=cv,
             verbose=2,
             random_state=42,
-            n_jobs=-1,
+            n_jobs=1,          # run CV jobs sequentially
         )
 
         print("Starting hyperparameter search...")

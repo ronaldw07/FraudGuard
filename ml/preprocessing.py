@@ -33,7 +33,8 @@ def load_and_preprocess():
     print(f"Fraud cases in training set before SMOTE: {y_train.sum()}")
 
     # Apply SMOTE only on training data
-    smote = SMOTE(random_state=42)
+    # sampling_strategy=0.1 caps fraud at 10% of majority class (~22k rows) instead of full balance (~450k rows)
+    smote = SMOTE(random_state=42, sampling_strategy=0.1)
     X_train_resampled, y_train_resampled = smote.fit_resample(X_train, y_train)
 
     print(f"Training set size after SMOTE: {len(X_train_resampled)}")

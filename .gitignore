@@ -10,9 +10,6 @@ build/
 
 # ML artifacts
 ml/outputs/
-backend/model/model.pkl
-backend/model/scaler.pkl
-backend/model/threshold.json
 mlruns/
 
 # Dataset (large file — download separately from Kaggle)
@@ -26,3 +23,4 @@ frontend/dist/
 # Misc
 .DS_Store
 *.log
+CLAUDE.md

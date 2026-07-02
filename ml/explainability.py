@@ -1,26 +1,22 @@
 # Author: Ronald Wen
 # explainability.py - SHAP-based feature attribution for model predictions
 
-import os
-import joblib
-import numpy as np
 import pandas as pd
 import shap
 
-MODEL_PATH = os.path.join(os.path.dirname(__file__), '..', 'backend', 'model', 'model.pkl')
-
-_model = None
 _explainer = None
+_explainer_model_id = None
 
 
-def _load_explainer():
-    global _model, _explainer
-    if _explainer is None:
-        _model = joblib.load(MODEL_PATH)
-        _explainer = shap.TreeExplainer(_model)
+def _get_explainer(model) -> shap.TreeExplainer:
+    global _explainer, _explainer_model_id
+    if _explainer is None or _explainer_model_id != id(model):
+        _explainer = shap.TreeExplainer(model)
+        _explainer_model_id = id(model)
+    return _explainer
 
 
-def get_shap_values(input_df: pd.DataFrame) -> dict:
+def get_shap_values(model, input_df: pd.DataFrame) -> dict:
     """
     Compute SHAP values for a single transaction input.
 
@@ -29,9 +25,9 @@ def get_shap_values(input_df: pd.DataFrame) -> dict:
       - shap_value: raw SHAP value (float)
       - direction: 'increases' or 'decreases' fraud risk
     """
-    _load_explainer()
+    explainer = _get_explainer(model)
 
-    shap_values = _explainer.shap_values(input_df)
+    shap_values = explainer.shap_values(input_df)
 
     # For binary classification, shap_values may be a list [class0, class1]
     if isinstance(shap_values, list):

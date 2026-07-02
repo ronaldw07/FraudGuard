@@ -1,6 +1,7 @@
 // Author: Ronald Wen
 import { useState } from 'react'
 import Navbar from '../components/Navbar'
+import InstructionsPanel from '../components/InstructionsPanel'
 import TransactionForm from '../components/TransactionForm'
 import ResultCard from '../components/ResultCard'
 import ShapChart from '../components/ShapChart'
@@ -27,7 +28,9 @@ export default function Dashboard() {
       <Navbar />
 
       <main className="max-w-7xl mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
+        <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr_1fr] gap-8 mb-10">
+          <InstructionsPanel />
+
           <TransactionForm onResult={handleResult} />
 
           {result && (

@@ -74,7 +74,7 @@ def predict(
     is_fraud = fraud_probability >= threshold
     risk_level = assign_risk_level(fraud_probability)
 
-    shap_result = explainability.get_shap_values(input_df)
+    shap_result = explainability.get_shap_values(model, input_df)
     top_features = shap_result['top_features']
 
     log = PredictionLog(

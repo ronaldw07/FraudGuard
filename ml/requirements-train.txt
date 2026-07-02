@@ -1,0 +1,7 @@
+# Training-only dependencies. Not installed in the served Docker image —
+# see backend/requirements.txt for what actually ships to production.
+# Install with: pip install -r backend/requirements.txt -r ml/requirements-train.txt
+
+imbalanced-learn==0.12.2
+mlflow==2.12.2
+matplotlib==3.8.4

@@ -51,7 +51,7 @@ In production the React build is served **by the FastAPI app itself** as a singl
 | ML       | XGBoost, scikit-learn, SHAP, imbalanced-learn, MLflow  |
 | Backend  | FastAPI, SQLAlchemy, PostgreSQL, JWT, slowapi          |
 | Frontend | React, TypeScript, Vite, Tailwind CSS, Recharts, axios |
-| Deploy   | Docker (single-image build), Railway                   |
+| Deploy   | Docker (single-image build), Render, Neon (Postgres)    |
 
 ---
 
@@ -65,7 +65,7 @@ cd FraudGuard
 
 # 1. Add the dataset and train the model (produces backend/model/*.pkl)
 #    Place creditcard.csv at ml/creditcard.csv first.
-pip install -r backend/requirements.txt
+pip install -r backend/requirements.txt -r ml/requirements-train.txt
 python ml/preprocessing.py
 python ml/train.py
 python ml/evaluate.py
@@ -78,9 +78,16 @@ docker-compose up --build
 - API docs: http://localhost:8000/docs
 - Login: `demo` / `fraudguard123`
 
-## Deploy (single URL, Railway)
+## Deploy (single URL, free tier)
 
-The repo builds to one image ([`docker/Dockerfile.web`](docker/Dockerfile.web)) where FastAPI serves the React build. On Railway: add a PostgreSQL plugin, set `DATABASE_URL`, `JWT_SECRET`, and `SEED_DEMO_USER=true`, then generate a domain. See the environment variables in [`.env.example`](.env.example).
+The repo builds to one image ([`docker/Dockerfile.web`](docker/Dockerfile.web)) where FastAPI serves the React build, so the whole platform runs as one Render web service on one URL.
+
+1. Create a free Postgres database at [neon.tech](https://neon.tech) and copy its connection string.
+2. On [Render](https://render.com): **New -> Blueprint**, connect this repo. Render reads [`render.yaml`](render.yaml) and provisions the service automatically.
+3. When prompted for `DATABASE_URL`, paste the Neon connection string. `JWT_SECRET` is auto-generated; `SEED_DEMO_USER` is already set.
+4. Once it deploys, Render gives you a public `*.onrender.com` URL — that's your live link.
+
+Note: Render's free tier spins the service down after 15 minutes of inactivity; the next request takes ~30-50s to wake it back up.
 
 ## Author
 

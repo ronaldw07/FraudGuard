@@ -1,22 +1,21 @@
 # Author: Ronald Wen
 # auth.py - Authentication routes: login and JWT token issuance
 
-import os
 from datetime import datetime, timedelta
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 from jose import jwt
 from passlib.context import CryptContext
 from sqlalchemy.orm import Session
 
+from config import ALGORITHM, JWT_SECRET
 from database import get_db
 from models import User
+from rate_limit import limiter
 from schemas import Token, UserLogin
 
 router = APIRouter(prefix='/auth', tags=['auth'])
 
-JWT_SECRET = os.getenv('JWT_SECRET', 'change-me-in-production')
-ALGORITHM = 'HS256'
 TOKEN_EXPIRE_MINUTES = 30
 
 pwd_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
@@ -45,7 +44,8 @@ def seed_demo_user(db: Session):
 
 
 @router.post('/login', response_model=Token)
-def login(credentials: UserLogin, db: Session = Depends(get_db)):
+@limiter.limit('10/minute')
+def login(credentials: UserLogin, request: Request, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.username == credentials.username).first()
     if not user or not verify_password(credentials.password, user.hashed_password):
         raise HTTPException(

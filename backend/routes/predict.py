@@ -16,6 +16,7 @@ import explainability
 from database import get_db
 from dependencies import get_current_user
 from models import PredictionLog, User
+from rate_limit import limiter
 from schemas import PredictionResponse, ShapFeature, TransactionInput
 
 router = APIRouter(prefix='/predict', tags=['predict'])
@@ -32,6 +33,7 @@ def assign_risk_level(probability: float) -> str:
 
 
 @router.post('', response_model=PredictionResponse)
+@limiter.limit('30/minute')
 def predict(
     transaction: TransactionInput,
     request: Request,

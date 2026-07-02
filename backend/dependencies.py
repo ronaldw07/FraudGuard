@@ -1,17 +1,14 @@
 # Author: Ronald Wen
 # dependencies.py - Shared FastAPI dependencies including JWT authentication
 
-import os
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from jose import JWTError, jwt
 from sqlalchemy.orm import Session
 
+from config import ALGORITHM, JWT_SECRET
 from database import get_db
 from models import User
-
-JWT_SECRET = os.getenv('JWT_SECRET', 'change-me-in-production')
-ALGORITHM = 'HS256'
 
 bearer_scheme = HTTPBearer()
 

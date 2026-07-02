@@ -1,0 +1,16 @@
+# Keep the Docker build context small and fast.
+.git
+**/node_modules
+frontend/dist
+backend/static
+**/__pycache__
+*.pyc
+.venv
+venv
+mlruns
+ml/outputs
+creditcard.csv
+ml/creditcard.csv
+.env
+*.log
+.DS_Store

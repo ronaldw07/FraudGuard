@@ -9,4 +9,5 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY backend/ .
 COPY ml/explainability.py /ml/explainability.py
 
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Railway injects $PORT; fall back to 8000 for local docker-compose.
+CMD ["sh", "-c", "uvicorn main:app --host 0.0.0.0 --port ${PORT:-8000}"]

@@ -7,6 +7,10 @@ COPY frontend/package.json frontend/package-lock.json* ./
 RUN npm install
 
 COPY frontend/ .
+
+# Baked into the bundle at build time. Empty by default (relative paths via nginx proxy).
+ARG VITE_API_URL=""
+ENV VITE_API_URL=$VITE_API_URL
 RUN npm run build
 
 FROM nginx:alpine

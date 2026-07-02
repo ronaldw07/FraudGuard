@@ -25,6 +25,8 @@ services:
     environment:
       DATABASE_URL: postgresql://fraudguard:fraudguard@postgres:5432/fraudguard
       JWT_SECRET: ${JWT_SECRET:-supersecretkey}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:3000}
+      SEED_DEMO_USER: 'true'
     depends_on:
       postgres:
         condition: service_healthy

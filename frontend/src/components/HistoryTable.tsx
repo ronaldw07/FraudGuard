@@ -50,7 +50,7 @@ export default function HistoryTable({ refreshKey }: Props) {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-slate-700">
-                <th className="text-left text-slate-400 font-medium pb-2 pr-4">Timestamp</th>
+                <th className="text-left text-slate-400 font-medium pb-2 pr-4">Timestamp (PT)</th>
                 <th className="text-right text-slate-400 font-medium pb-2 pr-4">Amount</th>
                 <th className="text-right text-slate-400 font-medium pb-2 pr-4">Probability</th>
                 <th className="text-center text-slate-400 font-medium pb-2 pr-4">Risk</th>
@@ -61,7 +61,11 @@ export default function HistoryTable({ refreshKey }: Props) {
               {history.map(item => (
                 <tr key={item.id} className="border-b border-slate-800 hover:bg-navy-700 transition">
                   <td className="py-2 pr-4 text-slate-300">
-                    {new Date(item.timestamp).toLocaleString()}
+                    {new Date(item.timestamp).toLocaleString('en-US', {
+                      timeZone: 'America/Los_Angeles',
+                      dateStyle: 'medium',
+                      timeStyle: 'short',
+                    })}
                   </td>
                   <td className="py-2 pr-4 text-right text-slate-300">
                     ${item.amount.toFixed(2)}

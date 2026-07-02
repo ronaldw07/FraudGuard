@@ -5,18 +5,13 @@ import { useAuth } from '../context/AuthContext'
 import type { PredictionResult } from '../pages/Dashboard'
 
 const FIELDS: { name: string; label: string; description: string }[] = [
-  { name: 'Time', label: 'Time', description: 'Seconds elapsed since first transaction in dataset' },
+  { name: 'Time', label: 'Time', description: 'Seconds elapsed since the first transaction in the dataset' },
   { name: 'Amount', label: 'Amount ($)', description: 'Transaction amount in USD' },
-  { name: 'V1', label: 'V1', description: 'PCA component 1 — related to identity signals' },
-  { name: 'V2', label: 'V2', description: 'PCA component 2 — related to merchant category' },
-  { name: 'V3', label: 'V3', description: 'PCA component 3 — related to transaction frequency' },
-  { name: 'V4', label: 'V4', description: 'PCA component 4 — related to location patterns' },
-  { name: 'V5', label: 'V5', description: 'PCA component 5 — related to device signals' },
-  { name: 'V6', label: 'V6', description: 'PCA component 6 — related to cardholder behavior' },
-  { name: 'V7', label: 'V7', description: 'PCA component 7 — related to purchase pattern' },
-  { name: 'V8', label: 'V8', description: 'PCA component 8 — related to account age' },
-  { name: 'V9', label: 'V9', description: 'PCA component 9 — related to velocity signals' },
-  { name: 'V10', label: 'V10', description: 'PCA component 10 — related to risk indicators' },
+  ...Array.from({ length: 10 }, (_, i) => ({
+    name: `V${i + 1}`,
+    label: `V${i + 1}`,
+    description: 'Anonymized PCA component — real-world meaning is not disclosed by the dataset',
+  })),
 ]
 
 type FormValues = Record<string, string>

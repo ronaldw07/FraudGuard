@@ -1,9 +1,9 @@
 # Author: Ronald Wen
 # schemas.py - Pydantic request and response schemas
 
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
-from pydantic import BaseModel
+from pydantic import BaseModel, field_serializer
 
 
 class TransactionInput(BaseModel):
@@ -54,3 +54,11 @@ class PredictionHistoryItem(BaseModel):
 
     class Config:
         from_attributes = True
+
+    @field_serializer('timestamp')
+    def serialize_timestamp(self, value: datetime, _info) -> str:
+        # Stored timestamps are naive UTC (datetime.utcnow()) — attach the
+        # offset explicitly so clients don't misparse it as local time.
+        if value.tzinfo is None:
+            value = value.replace(tzinfo=timezone.utc)
+        return value.isoformat()
